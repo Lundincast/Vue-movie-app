@@ -31,7 +31,19 @@ export default {
     return instance
       .get(url, {
         params: {
-          append_to_response: 'credits'
+          append_to_response: 'credits,recommendations'
+        }
+      })
+      .then(response => {
+        return response.data
+      })
+  },
+  getPeopleDetails (id) {
+    let url = '/person/' + id
+    return instance
+      .get(url, {
+        params: {
+          append_to_response: 'images,movie_credits'
         }
       })
       .then(response => {

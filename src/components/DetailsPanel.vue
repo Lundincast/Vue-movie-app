@@ -1,16 +1,30 @@
 <template>
 <div>
-  <a class="text--primary" @click="$router.go(-1)">Back to Home</a>
+  <a class="text--primary body-2 mb-3 d-block" @click="$router.go(-1)">Back to Home</a>
   <h1 class="font-weight-bold mb-6 display-2">{{ movie.title }}</h1>
-  <p><b>Release year: </b>{{ movie.release_date }}</p>
-  <p><b>Production countries:</b> {{ productionCountries }}</p>
-  <p><b>Director:</b> {{ movie.director }}</p>
+  <div>
+    <div>
+      <b>Release year</b> : {{ movie.release_date }}
+    </div>
+    <div>
+      <b>Production countries</b> : {{ productionCountries }}
+    </div>
+    <div>
+      <b>Director: </b>
+      <router-link v-bind:to="{ name: 'people', params: { id: movie.director[0].id }}">
+        {{ movie.director[0].name }}
+      </router-link>
+    </div>
+  </div>
   <p><b>Duration :</b> {{ movie.runtime }} min</p>
   <p><b>Summary:</b> {{ movie.overview }}</p>
   <p><b>Cast: </b></p>
-  <p v-for="(people, index) in movie.cast" :key="index">
-    {{ people.character }}: <b>{{ people.name }}</b>
-  </p>
+  <div v-for="(people, index) in movie.cast" :key="index">
+    {{ people.character }}:
+    <router-link v-bind:to="{ name: 'people', params: { id: people.id}}">
+      <b>{{ people.name }}</b>
+    </router-link>
+  </div>
 </div>
 </template>
 

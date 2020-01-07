@@ -5,7 +5,7 @@
     ></v-img>
     <v-card-title primary-title>
       <div>
-        <h2>{{movie.title}}</h2>
+        <h3>{{movie.title}}</h3>
         <div>{{movie.release_date}}</div>
       </div>
     </v-card-title>
