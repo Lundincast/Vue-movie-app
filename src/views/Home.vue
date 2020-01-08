@@ -1,15 +1,5 @@
 <template>
-  <v-container v-if="loading">
-    <div class="text-xs-center">
-      <v-progress-circular
-        indeterminate
-        :size="150"
-        :width="8"
-        color="green">
-      </v-progress-circular>
-    </div>
-  </v-container>
-  <v-container v-else grid-list-xl>
+  <v-container grid-list-xl>
     <v-layout wrap>
       <v-flex
         v-for="(item, index) in movies"
@@ -17,7 +7,14 @@
         xs12
         sm3
         mb-2>
-        <MovieCard v-bind:movie="item"/>
+        <v-skeleton-loader
+          :loading="loading"
+          transition='scale-transition'
+          height='294'
+          type='image, list-item-two-line'
+        >
+          <MovieCard v-bind:movie="item"/>
+        </v-skeleton-loader>
       </v-flex>
     </v-layout>
   </v-container>
