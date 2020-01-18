@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import api from '../api/api'
+import firebase from 'firebase'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    user: null,
     loading: false,
     movies: [],
     movie: null,
@@ -20,6 +22,12 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setUser (state, payload) {
+      state.user = payload
+    },
+    removeUser (state, payload) {
+      state.user = null
+    },
     setMovies (state, payload) {
       state.movies = payload
     },
@@ -34,6 +42,13 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setUser ({ commit }, params) {
+      commit('setUser', params)
+    },
+    removeUser ({ commit }) {
+      firebase.auth().signOut()
+      commit('removeUser')
+    },
     async getMovies ({ state, commit }, params) {
       state.loading = true
       try {
