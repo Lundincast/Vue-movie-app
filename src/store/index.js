@@ -46,8 +46,12 @@ export default new Vuex.Store({
       commit('setUser', params)
     },
     removeUser ({ commit }) {
-      firebase.auth().signOut()
-      commit('removeUser')
+      firebase.auth().signOut().then(function () {
+        // Sign-out successful.
+        commit('removeUser')
+      }).catch(function (error) {
+        console.log(error)
+      })
     },
     async getMovies ({ state, commit }, params) {
       state.loading = true
