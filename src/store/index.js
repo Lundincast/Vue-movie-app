@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import api from '../api/api'
 import firebase from 'firebase'
+import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,20 @@ export default new Vuex.Store({
       return state.people.images.profiles
         .slice(0, 10)
         .map(i => 'https://image.tmdb.org/t/p/w500' + i.file_path)
+    },
+    peopleCastCreditsList: state => {
+      state.people.movie_credits.cast.map(function (movie) {
+        movie.release_date = new Date(movie.release_date).getFullYear()
+        return movie
+      })
+      return state.people.movie_credits.cast
+    },
+    peopleCrewCreditsList: state => {
+      state.people.movie_credits.crew.map(function (movie) {
+        movie.release_date = new Date(movie.release_date).getFullYear()
+        return movie
+      })
+      return state.people.movie_credits.crew
     }
   },
   mutations: {
@@ -57,9 +72,7 @@ export default new Vuex.Store({
       state.loading = true
       try {
         let response = await api.getTrending()
-        let rawResults = response.results
-        let formattedResults = rawResults.map(function (movie) {
-          movie.poster_path = 'http://image.tmdb.org/t/p/w500' + movie.poster_path
+        let formattedResults = response.map(function (movie) {
           movie.release_date = new Date(movie.release_date).getFullYear()
           return movie
         })
@@ -75,20 +88,16 @@ export default new Vuex.Store({
         let response = await api.getSingleMovie(id)
         let movie = {}
         movie.title = response.title
-        movie.poster_path = 'http://image.tmdb.org/t/p/w500' + response.poster_path
+        movie.poster_path = response.poster_path
         movie.runtime = response.runtime
         movie.overview = response.overview
         movie.production_countries = response.production_countries
-        movie.release_date = new Date(response.release_date).getFullYear()
+        movie.release_date = new Date(response.release_date)
         movie.cast = response.credits.cast.slice(0, 15)
         movie.director = response.credits.crew.filter(p => p.job === 'Director')// .map(p => p.name).join(', ')
-        state.loading = false
-        let formattedRecommendations = response.recommendations.results.map(function (movie) {
-          movie.poster_path = 'http://image.tmdb.org/t/p/w500' + movie.poster_path
-          return movie
-        })
         commit('setSingleMovie', movie)
-        commit('setRecommendations', formattedRecommendations)
+        commit('setRecommendations', response.recommendations.results)
+        state.loading = false
       } catch (error) {
         console.log(error)
       }
@@ -96,6 +105,64 @@ export default new Vuex.Store({
     async getPeopleDetails ({ commit }, id) {
       try {
         const response = await api.getPeopleDetails(id)
+        // split movies based on if they have release_date defined or not
+        // see here for details https://lodash.com/docs/4.17.15#partition (used with
+        // the `_.property` iteratee shorthand)
+        let splitCastArray = _.partition(response.movie_credits.cast, 'release_date')
+        let splitCrewArray = _.partition(response.movie_credits.crew, 'release_date')
+        // Process arrays to remove duplicates movies when people have
+        // more than one role/job in a single movie
+        let mergedCastMovies = []
+        for (let i = 0; i < splitCastArray[0].length; i++) {
+          if (i === 0) {
+            mergedCastMovies.push(splitCastArray[0][i])
+            continue
+          }
+          for (let j = 0; j < mergedCastMovies.length; j++) {
+            if (splitCastArray[0][i].id === mergedCastMovies[j].id) {
+              mergedCastMovies[j].job = mergedCastMovies[j].job + ', ' + splitCastArray[0][i].job
+              break
+            }
+            if (j === mergedCastMovies.length - 1) {
+              mergedCastMovies.push(splitCastArray[0][i])
+              break
+            }
+          }
+        }
+        let mergedCrewMovies = []
+        for (let i = 0; i < splitCrewArray[0].length; i++) {
+          if (i === 0) {
+            mergedCrewMovies.push(splitCrewArray[0][i])
+            continue
+          }
+          for (let j = 0; j < mergedCrewMovies.length; j++) {
+            if (splitCrewArray[0][i].id === mergedCrewMovies[j].id) {
+              mergedCrewMovies[j].job = mergedCrewMovies[j].job + ', ' + splitCrewArray[0][i].job
+              break
+            }
+            if (j === mergedCrewMovies.length - 1) {
+              mergedCrewMovies.push(splitCrewArray[0][i])
+              break
+            }
+          }
+        }
+        // sort movies arrays by descending release_date
+        mergedCastMovies.sort(function (a, b) {
+          return new Date(b.release_date) - new Date(a.release_date)
+        })
+        mergedCrewMovies.sort(function (a, b) {
+          return new Date(b.release_date) - new Date(a.release_date)
+        })
+        // If there was movies with no release_date, add them to the end of their respective arrays
+        if (splitCastArray[1]) {
+          mergedCastMovies.push(...splitCastArray[1])
+        }
+        if (splitCrewArray[1]) {
+          mergedCrewMovies.push(...splitCrewArray[1])
+        }
+        // reassign these processed array to their respective properties in the response object
+        response.movie_credits.cast = mergedCastMovies
+        response.movie_credits.crew = mergedCrewMovies
         commit('setPeopleDetails', response)
       } catch (error) {
         console.log(error)

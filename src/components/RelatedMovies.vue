@@ -35,7 +35,6 @@ export default {
     relatedMovies () {
       let related = this.recommendations.map(function (movie) {
         movie.selfLink = 'http://localhost:8080/movie/' + movie.id
-        console.log(movie)
         return movie
       })
       return related

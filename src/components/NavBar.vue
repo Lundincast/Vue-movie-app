@@ -176,11 +176,9 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((response) => {
           alert('success')
-          console.log(response)
         })
         .catch((error) => {
           alert(error)
-          console.log(error)
         })
     },
     logout () {

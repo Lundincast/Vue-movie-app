@@ -10,6 +10,11 @@
             <PeopleDetailsPanel :people="people"/>
           </v-col>
         </v-row>
+        <v-row>
+          <PeopleCredits
+            v-bind:castMovies="peopleCastCreditsList"
+            v-bind:crewMovies="peopleCrewCreditsList"/>
+        </v-row>
       </v-container>
     </v-responsive>
   </v-container>
@@ -19,20 +24,24 @@
 // @ is an alias to /src
 import ImageDisplayer from '@/components/ImageDisplayer'
 import PeopleDetailsPanel from '@/components/PeopleDetailsPanel'
+import PeopleCredits from '@/components/PeopleCredits'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'People',
   components: {
     ImageDisplayer,
-    PeopleDetailsPanel
+    PeopleDetailsPanel,
+    PeopleCredits
   },
   computed: {
     ...mapState({
       people: state => state.people
     }),
     ...mapGetters([
-      'peopleImages'
+      'peopleImages',
+      'peopleCastCreditsList',
+      'peopleCrewCreditsList'
     ])
   },
   created () {

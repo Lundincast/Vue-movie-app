@@ -4,7 +4,7 @@
   <h1 class="font-weight-bold mb-6 display-2">{{ movie.title }}</h1>
   <div>
     <div>
-      <b>Release year</b> : {{ movie.release_date }}
+      <b>Release year</b> : {{ releaseDate }}
     </div>
     <div>
       <b>Production countries</b> : {{ productionCountries }}
@@ -36,6 +36,9 @@ export default {
     productionCountries () {
       const countries = this.movie.production_countries.map(c => c.name)
       return countries.join(', ')
+    },
+    releaseDate () {
+      return this.movie.release_date.getFullYear()
     }
   }
 }
