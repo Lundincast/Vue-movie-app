@@ -1,5 +1,5 @@
 <template>
-  <v-container class="mx-0">
+  <v-container class="mx-auto">
     <v-responsive>
       <v-flex>
         <v-card>
@@ -14,15 +14,17 @@
               Crew ({{ crewMovies.length }})
             </v-tab>
             <v-tab-item v-if="castMovies.length > 0">
-              <v-row
-                v-for="(movie, index) in castMovies"
-                :key="index"
-                @click="singleMovie(movie.id)"
-              >
-                <v-hover>
-                  <template v-slot="{ hover }">
-                    <v-card :elevation="hover ? 6 : 1" class="my-2">
-                      <v-row>
+              <v-container>
+                <template
+                  v-for="(movie, index) in castMovies"
+                >
+                  <v-hover v-slot:default="{ hover }" :key="index">
+                    <v-card
+                      :elevation="hover ? 10 : 2"
+                      class="my-2"
+                      @click="singleMovie(movie.id)"
+                    >
+                      <v-row class="pe-6">
                         <v-col
                           cols="3"
                         >
@@ -51,45 +53,53 @@
                         </v-col>
                       </v-row>
                     </v-card>
-                  </template>
-                </v-hover>
-              </v-row>
+                  </v-hover>
+                </template>
+              </v-container>
             </v-tab-item>
             <v-tab-item v-if="crewMovies.length > 0">
-              <v-card flat>
-                <v-row
+              <v-container>
+                <template
                   v-for="(movie, index) in crewMovies"
-                  :key="index"
-                  @click="singleMovie(movie.id)"
                 >
-                  <v-col
-                    cols="3"
-                  >
-                    <v-img
-                      class="mx-auto"
-                      height="225"
-                      width="150"
-                      :src="movie.poster_path"
-                    ></v-img>
-                  </v-col>
-                  <v-col
-                    cols="9"
-                  >
-                    <v-row>
-                      <h3>{{ movie.title }}</h3>
-                    </v-row>
-                    <v-row>
-                      {{ movie.release_date }}
-                    </v-row>
-                    <v-row>
-                      Job: {{ movie.job }}
-                    </v-row>
-                    <v-row>
-                      {{ movie.overview }}
-                    </v-row>
-                  </v-col>
-                </v-row>
-              </v-card>
+                  <v-hover v-slot:default="{ hover }" :key="index">
+                    <v-card
+                      :elevation="hover ? 10 : 2"
+                      class="my-2"
+                      @click="singleMovie(movie.id)"
+                    >
+                      <v-row class="pe-6">
+                        <v-col
+                          cols="3"
+                        >
+                          <v-img
+                            class="mx-auto"
+                            height="225"
+                            width="150"
+                            :src="movie.poster_path"
+                          ></v-img>
+                        </v-col>
+                        <v-col
+                          cols="9"
+                        >
+                          <v-row>
+                            <h3>{{ movie.title }}</h3>
+                          </v-row>
+                          <v-row>
+                            {{ movie.release_date }}
+                          </v-row>
+                          <v-row>
+                            Job: {{ movie.job }}
+                          </v-row>
+                          <v-row>
+                            {{ movie.overview }}
+                          </v-row>
+                        </v-col>
+                      </v-row>
+                    </v-card>
+                  </v-hover>
+                </template>
+              </v-container>
             </v-tab-item>
           </v-tabs>
         </v-card>
