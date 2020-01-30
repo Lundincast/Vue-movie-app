@@ -20,17 +20,14 @@
 
 <script>
 // @ is an alias to /src
-import ImageDisplayer from '@/components/ImageDisplayer'
-import DetailsPanel from '@/components/DetailsPanel'
-import RelatedMovies from '@/components/RelatedMovies'
 import { mapState } from 'vuex'
 
 export default {
   name: 'Movie',
   components: {
-    ImageDisplayer,
-    DetailsPanel,
-    RelatedMovies
+    ImageDisplayer: () => import('@/components/ImageDisplayer'),
+    DetailsPanel: () => import('@/components/DetailsPanel'),
+    RelatedMovies: () => import('@/components/RelatedMovies')
   },
   computed: mapState({
     loading: state => state.loading,

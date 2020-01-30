@@ -22,13 +22,12 @@
 
 <script>
 // @ is an alias to /src
-import MovieCard from '@/components/MovieCard.vue'
 import { mapState } from 'vuex'
 
 export default {
   name: 'home',
   components: {
-    MovieCard
+    MovieCard: () => import('@/components/MovieCard.vue')
   },
   computed: {
     ...mapState({
