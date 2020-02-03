@@ -35,7 +35,7 @@ export default {
       movies: state => state.movies
     })
   },
-  created () {
+  async mounted () {
     this.$store.dispatch('getMovies')
   }
 }

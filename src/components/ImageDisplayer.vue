@@ -2,7 +2,7 @@
   <v-img v-if="isSingleImage"
     :src="images[0]"
   ></v-img>
-  <v-carousel v-else>
+  <v-carousel v-else height="900">
     <v-carousel-item
         v-for="(image,i) in images"
         :key="i"

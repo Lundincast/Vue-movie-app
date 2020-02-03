@@ -1,10 +1,10 @@
 <template>
 <div>
   <a class="text--primary body-2 mb-3 d-block" @click="$router.go(-1)">Back to Home</a>
-  <h1 class="font-weight-bold mb-6 display-2">{{ movie.title }}</h1>
+  <h1 class="font-weight-bold mb-6 display-3">{{ movie.title }}</h1>
   <div>
     <div>
-      <b>Release year</b> : {{ releaseDate }}
+      <p class="headline">{{ releaseDate }}</p>
     </div>
     <div>
       <b>Production countries</b> : {{ productionCountries }}
@@ -17,7 +17,7 @@
     </div>
   </div>
   <p><b>Duration :</b> {{ movie.runtime }} min</p>
-  <p><b>Summary:</b> {{ movie.overview }}</p>
+  <p class="body-1"><b>Summary:</b> {{ movie.overview }}</p>
   <p><b>Cast: </b></p>
   <div v-for="(people, index) in movie.cast" :key="index">
     {{ people.character }}:

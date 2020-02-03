@@ -10,7 +10,7 @@
               <DetailsPanel v-bind:movie="movie"/>
             </v-col>
           </v-row>
-          <v-row v-if="recommendations" class="container container-fluid lighten-2">
+          <v-row v-if="recommendations.length !== 0" class="container container-fluid lighten-2">
             <RelatedMovies v-bind:recommendations="recommendations"/>
           </v-row>
         </div>
@@ -34,7 +34,7 @@ export default {
     movie: state => state.movie,
     recommendations: state => state.recommendations
   }),
-  created () {
+  async mounted () {
     this.$store.dispatch('getSingleMovie', this.$route.params.id)
   }
 }

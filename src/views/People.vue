@@ -41,7 +41,7 @@ export default {
       'peopleCrewCreditsList'
     ])
   },
-  created () {
+  async mounted () {
     this.$store.dispatch('getPeopleDetails', this.$route.params.id)
   }
 }
