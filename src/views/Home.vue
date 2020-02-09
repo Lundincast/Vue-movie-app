@@ -9,9 +9,8 @@
         mb-2>
         <v-skeleton-loader
           :loading="loading"
-          transition='scale-transition'
-          height='294'
-          type='image, list-item-two-line'
+          height='1500'
+          type='image, image, list-item-two-line'
         >
           <MovieCard v-bind:movie="item"/>
         </v-skeleton-loader>

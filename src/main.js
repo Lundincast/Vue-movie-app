@@ -27,6 +27,8 @@ firebase.initializeApp(firebaseConfig)
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     store.dispatch('setUser', user)
+    store.dispatch('getFavoriteMovies', user.uid)
+    store.dispatch('getWatchlistedMovies', user.uid)
   } else {
     console.log('Nope but got here')
   }

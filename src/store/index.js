@@ -13,7 +13,9 @@ export default new Vuex.Store({
     movies: [],
     movie: null,
     people: null,
-    recommendations: null
+    recommendations: null,
+    favoriteMovies: null,
+    watchlistedMovies: null
   },
   getters: {
     peopleImages: state => {
@@ -34,6 +36,18 @@ export default new Vuex.Store({
         return movie
       })
       return state.people.movie_credits.crew
+    },
+    favMoviesIds: state => {
+      let ids = state.favoriteMovies.map(function (movie) {
+        return movie.movie_id
+      })
+      return ids
+    },
+    watchlistedMoviesIds: state => {
+      let ids = state.watchlistedMovies.map(function (movie) {
+        return movie.movie_id
+      })
+      return ids
     }
   },
   mutations: {
@@ -54,6 +68,12 @@ export default new Vuex.Store({
     },
     setRecommendations (state, payload) {
       state.recommendations = payload
+    },
+    setFavoriteMovies (state, payload) {
+      state.favoriteMovies = payload
+    },
+    setWatchlistedMovies (state, payload) {
+      state.watchlistedMovies = payload
     }
   },
   actions: {
@@ -166,6 +186,88 @@ export default new Vuex.Store({
         commit('setPeopleDetails', response)
       } catch (error) {
         console.log(error)
+      }
+    },
+    getFavoriteMovies ({ state, commit }, userId) {
+      firebase.firestore()
+        .collection('FavoriteMovies')
+        .where('user_id', '==', userId)
+        .onSnapshot(function (querySnapshot) {
+          let favs = []
+          querySnapshot.forEach(doc => {
+            var movie = {}
+            movie.movie_id = doc.data().movie_id
+            movie.movie_name = doc.data().movie_name
+            movie.docId = doc.ref.id
+            favs.push(movie)
+          })
+          commit('setFavoriteMovies', favs)
+        })
+    },
+    getWatchlistedMovies ({ state, commit }, userId) {
+      firebase.firestore()
+        .collection('WatchlistedMovies')
+        .where('user_id', '==', userId)
+        .onSnapshot(function (querySnapshot) {
+          let wl = []
+          querySnapshot.forEach(doc => {
+            var movie = {}
+            movie.movie_id = doc.data().movie_id
+            movie.movie_name = doc.data().movie_name
+            movie.docId = doc.ref.id
+            wl.push(movie)
+          })
+          commit('setWatchlistedMovies', wl)
+        })
+    },
+    addToFavs ({ commit }, movieInfo) {
+      // Add a new document with a generated id.
+      firebase.firestore()
+        .collection('FavoriteMovies')
+        .add({
+          movie_id: movieInfo[0],
+          movie_name: movieInfo[1],
+          user_id: firebase.auth().currentUser.uid
+        })
+    },
+    removeFromFavs ({ state, commit }, movieId) {
+      // Get docId from state.favoriteMovies
+      let docId = null
+      for (let i = 0; i < state.favoriteMovies.length; i++) {
+        if (state.favoriteMovies[i].movie_id === movieId) {
+          docId = state.favoriteMovies[i].docId
+          break
+        }
+      }
+      if (docId) {
+        firebase.firestore()
+          .collection('FavoriteMovies')
+          .doc(docId)
+          .delete()
+      }
+    },
+    addToWatchlist ({ commit }, movieInfo) {
+      firebase.firestore()
+        .collection('WatchlistedMovies')
+        .add({
+          movie_id: movieInfo[0],
+          movie_name: movieInfo[1],
+          user_id: firebase.auth().currentUser.uid
+        })
+    },
+    removeFromWatchlist ({ state, commit }, movieId) {
+      let docId = null
+      for (let i = 0; i < state.watchlistedMovies.length; i++) {
+        if (state.watchlistedMovies[i].movie_id === movieId) {
+          docId = state.watchlistedMovies[i].docId
+          break
+        }
+      }
+      if (docId) {
+        firebase.firestore()
+          .collection('WatchlistedMovies')
+          .doc(docId)
+          .delete()
       }
     }
   }
