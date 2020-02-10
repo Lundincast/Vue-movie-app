@@ -1,67 +1,71 @@
 <template>
-<div>
-  <a class="text--primary body-2 mb-3 d-block" @click="$router.go(-1)">Back to Home</a>
-  <h1 class="font-weight-bold mb-6 display-3">{{ movie.title }}</h1>
-  <div>
-    <div>
-      <p class="headline">{{ releaseDate }}</p>
-    </div>
-  </div>
-  <div class="mx-n2 mb-4">
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn
-          :text="!isFavorite"
-          large
-          :outlined="!isFavorite"
-          class="mx-1"
-          color="success"
-          @click="favClicked"
-          v-on="on">
-          Favorite
-            <v-icon class="mx-1">mdi-heart</v-icon>
-        </v-btn>
-      </template>
-      <span>{{ nextFavAction }} Favorites</span>
-    </v-tooltip>
-    <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn
-          :text="!isWatchlisted"
-          large
-          class="mx-1"
-          :outlined="!isWatchlisted"
-          color="error"
-          @click="WatchlistClicked"
-          v-on="on">
-          Watchlist
-            <v-icon class="mx-1">mdi-update</v-icon>
-        </v-btn>
-      </template>
-        <span>{{ nextWatchlistAction }} Watchlist</span>
-    </v-tooltip>
-  </div>
-  <div>
-    <div>
-      <b>Production countries</b> : {{ productionCountries }}
-    </div>
-    <div>
-      <b>Director: </b>
-      <router-link v-bind:to="{ name: 'people', params: { id: movie.director[0].id }}">
-        {{ movie.director[0].name }}
-      </router-link>
-    </div>
-  </div>
-  <p><b>Duration :</b> {{ movie.runtime }} min</p>
-  <p class="body-1"><b>Summary:</b> {{ movie.overview }}</p>
-  <p><b>Cast: </b></p>
-  <div v-for="(people, index) in movie.cast" :key="index">
-    {{ people.character }}:
-    <router-link v-bind:to="{ name: 'people', params: { id: people.id}}">
-      <b>{{ people.name }}</b>
-    </router-link>
-  </div>
-</div>
+<v-container>
+  <v-row>
+    <v-col col col-12>
+      <a class="text--primary body-2 mb-3 d-block underlined" @click="$router.go(-1)">Back to Home</a>
+      <h1 class="font-weight-bold mb-6 display-2">{{ movie.title }}</h1>
+      <div>
+        <div>
+          <p class="headline">{{ releaseDate }}</p>
+        </div>
+      </div>
+      <div class="mx-n2 mb-4">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              :text="!isFavorite"
+              large
+              :outlined="!isFavorite"
+              class="mx-1"
+              color="success"
+              @click="favClicked"
+              v-on="on">
+              Favorite
+                <v-icon class="mx-1">mdi-heart</v-icon>
+            </v-btn>
+          </template>
+          <span>{{ nextFavAction }} Favorites</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              :text="!isWatchlisted"
+              large
+              class="mx-1"
+              :outlined="!isWatchlisted"
+              color="error"
+              @click="WatchlistClicked"
+              v-on="on">
+              Watchlist
+                <v-icon class="mx-1">mdi-update</v-icon>
+            </v-btn>
+          </template>
+            <span>{{ nextWatchlistAction }} Watchlist</span>
+        </v-tooltip>
+      </div>
+      <div>
+        <div>
+          <b>Production countries</b> : {{ productionCountries }}
+        </div>
+        <div>
+          <b>Director: </b>
+          <router-link v-bind:to="{ name: 'people', params: { id: movie.director[0].id }}">
+            {{ movie.director[0].name }}
+          </router-link>
+        </div>
+      </div>
+      <p><b>Duration :</b> {{ movie.runtime }} min</p>
+      <p class="body-1"><b>Summary:</b> {{ movie.overview }}</p>
+      <p><b>Cast: </b></p>
+      <div v-for="(people, index) in movie.cast" :key="index">
+        {{ people.character }}:
+        <router-link v-bind:to="{ name: 'people', params: { id: people.id}}">
+          <b>{{ people.name }}</b>
+        </router-link>
+      </div>
+    </v-col>
+  </v-row>
+</v-container>
 </template>
 
 <script>
@@ -130,5 +134,8 @@ export default {
 }
 .text--primary {
   color: rgba(0,0,0,.87) !important;
+}
+.underlined {
+  text-decoration: underline;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-container class="mb-6">
     <h2 class="font-weight-bold mb-6 text-center display-2">
-      You Might Also Like
+      <slot></slot>
     </h2>
     <v-container>
       <vueper-slides
@@ -30,10 +30,10 @@ import 'vueperslides/dist/vueperslides.css'
 export default {
   name: 'relatedMovies',
   components: { VueperSlides, VueperSlide },
-  props: ['recommendations'],
+  props: ['movieList'],
   computed: {
     relatedMovies () {
-      let related = this.recommendations.map(function (movie) {
+      let related = this.movieList.map(function (movie) {
         movie.selfLink = 'http://localhost:8080/movie/' + movie.id
         return movie
       })

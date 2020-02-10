@@ -31,5 +31,6 @@ firebase.auth().onAuthStateChanged((user) => {
     store.dispatch('getWatchlistedMovies', user.uid)
   } else {
     console.log('Nope but got here')
+    store.dispatch('removeUser')
   }
 })

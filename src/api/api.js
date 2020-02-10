@@ -41,13 +41,14 @@ export default {
     return instance
       .get(url, {
         params: {
-          append_to_response: 'credits,recommendations'
+          append_to_response: 'credits,recommendations,similar'
         }
       })
       .then(response => {
         let data = response.data
         data.poster_path = formattedUrl(response.data.poster_path)
         data.recommendations.results = processListUrls(data.recommendations.results)
+        data.similar.results = processListUrls(data.similar.results)
         return data
       })
   },

@@ -6,12 +6,23 @@
             <v-col md="6" cols="12">
               <ImageDisplayer v-bind:images="[movie.poster_path]"/>
             </v-col>
-            <v-col md="6" cols="12">
+            <v-col md="6" cols="12" class="pt-0">
               <DetailsPanel v-bind:movie="movie"/>
             </v-col>
           </v-row>
+          <v-row v-if="similar.length !== 0" class="container container-fluid lighten-2">
+            <RelatedMovies
+              v-bind:movieList="similar"
+            >
+              Similar Movies
+            </RelatedMovies>
+          </v-row>
           <v-row v-if="recommendations.length !== 0" class="container container-fluid lighten-2">
-            <RelatedMovies v-bind:recommendations="recommendations"/>
+            <RelatedMovies
+              v-bind:movieList="recommendations"
+            >
+              You Might Also Like
+            </RelatedMovies>
           </v-row>
         </div>
     </v-responsive>
@@ -32,7 +43,8 @@ export default {
   computed: mapState({
     loading: state => state.loading,
     movie: state => state.movie,
-    recommendations: state => state.recommendations
+    recommendations: state => state.recommendations,
+    similar: state => state.similar
   }),
   async mounted () {
     this.$store.dispatch('getSingleMovie', this.$route.params.id)

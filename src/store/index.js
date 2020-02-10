@@ -14,6 +14,7 @@ export default new Vuex.Store({
     movie: null,
     people: null,
     recommendations: null,
+    similar: null,
     favoriteMovies: null,
     watchlistedMovies: null
   },
@@ -69,11 +70,20 @@ export default new Vuex.Store({
     setRecommendations (state, payload) {
       state.recommendations = payload
     },
+    setSimilar (state, payload) {
+      state.similar = payload
+    },
     setFavoriteMovies (state, payload) {
       state.favoriteMovies = payload
     },
+    removeFavoriteMovies (state) {
+      state.favoriteMovies = null
+    },
     setWatchlistedMovies (state, payload) {
       state.watchlistedMovies = payload
+    },
+    removeWatchlistedMovies (state) {
+      state.watchlistedMovies = null
     }
   },
   actions: {
@@ -84,6 +94,8 @@ export default new Vuex.Store({
       firebase.auth().signOut().then(function () {
         // Sign-out successful.
         commit('removeUser')
+        commit('removeFavoriteMovies')
+        commit('removeWatchlistedMovies')
       }).catch(function (error) {
         console.log(error)
       })
@@ -117,6 +129,7 @@ export default new Vuex.Store({
         movie.director = response.credits.crew.filter(p => p.job === 'Director')// .map(p => p.name).join(', ')
         commit('setSingleMovie', movie)
         commit('setRecommendations', response.recommendations.results)
+        commit('setSimilar', response.similar.results)
         state.loading = false
       } catch (error) {
         console.log(error)
