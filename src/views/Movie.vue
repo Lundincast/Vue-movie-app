@@ -10,14 +10,14 @@
               <DetailsPanel v-bind:movie="movie"/>
             </v-col>
           </v-row>
-          <v-row v-if="similar.length !== 0" class="container container-fluid lighten-2">
+          <v-row v-if="similar.length > 0" class="container container-fluid lighten-2">
             <RelatedMovies
               v-bind:movieList="similar"
             >
               Similar Movies
             </RelatedMovies>
           </v-row>
-          <v-row v-if="recommendations.length !== 0" class="container container-fluid lighten-2">
+          <v-row v-if="recommendations.length > 0" class="container container-fluid lighten-2">
             <RelatedMovies
               v-bind:movieList="recommendations"
             >
@@ -47,7 +47,7 @@ export default {
     similar: state => state.similar
   }),
   async mounted () {
-    this.$store.dispatch('getSingleMovie', this.$route.params.id)
+    await this.$store.dispatch('getSingleMovie', this.$route.params.id)
   }
 }
 </script>

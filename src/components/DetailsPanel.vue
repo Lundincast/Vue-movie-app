@@ -118,10 +118,10 @@ export default {
     }
   },
   mounted () {
-    if (this.favMoviesIds.includes(this.$route.params.id)) {
+    if (this.favMoviesIds && this.favMoviesIds.includes(this.$route.params.id)) {
       this.isFavorite = true
     }
-    if (this.watchlistedMoviesIds.includes(this.$route.params.id)) {
+    if (this.watchlistedMoviesIds && this.watchlistedMoviesIds.includes(this.$route.params.id)) {
       this.isWatchlisted = true
     }
   }

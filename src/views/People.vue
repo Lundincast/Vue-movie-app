@@ -21,8 +21,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'People',
@@ -32,17 +31,15 @@ export default {
     PeopleCredits: () => import('@/components/PeopleCredits')
   },
   computed: {
-    ...mapState({
-      people: state => state.people
-    }),
     ...mapGetters([
+      'people',
       'peopleImages',
       'peopleCastCreditsList',
       'peopleCrewCreditsList'
     ])
   },
   async mounted () {
-    this.$store.dispatch('getPeopleDetails', this.$route.params.id)
+    await this.$store.dispatch('getPeopleDetails', this.$route.params.id)
   }
 }
 </script>

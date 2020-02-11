@@ -19,36 +19,55 @@ export default new Vuex.Store({
     watchlistedMovies: null
   },
   getters: {
+    people: state => {
+      return state.people
+    },
     peopleImages: state => {
-      return state.people.images.profiles
-        .slice(0, 10)
-        .map(i => 'https://image.tmdb.org/t/p/w500' + i.file_path)
+      if (state.people) {
+        return state.people.images.profiles
+          .slice(0, 10)
+          .map(i => 'https://image.tmdb.org/t/p/w500' + i.file_path)
+      } else {
+        return []
+      }
     },
     peopleCastCreditsList: state => {
-      state.people.movie_credits.cast.map(function (movie) {
-        movie.release_date = new Date(movie.release_date).getFullYear()
-        return movie
-      })
-      return state.people.movie_credits.cast
+      if (state.people) {
+        return state.people.movie_credits.cast.map(movie => {
+          movie.release_date = new Date(movie.release_date).getFullYear()
+          return movie
+        })
+      } else {
+        return []
+      }
     },
     peopleCrewCreditsList: state => {
-      state.people.movie_credits.crew.map(function (movie) {
-        movie.release_date = new Date(movie.release_date).getFullYear()
-        return movie
-      })
-      return state.people.movie_credits.crew
+      if (state.people) {
+        return state.people.movie_credits.crew.map(movie => {
+          movie.release_date = new Date(movie.release_date).getFullYear()
+          return movie
+        })
+      } else {
+        return []
+      }
     },
     favMoviesIds: state => {
-      let ids = state.favoriteMovies.map(function (movie) {
-        return movie.movie_id
-      })
-      return ids
+      if (state.favoriteMovies) {
+        return state.favoriteMovies.map(movie => {
+          return movie.movie_id
+        })
+      } else {
+        return []
+      }
     },
     watchlistedMoviesIds: state => {
-      let ids = state.watchlistedMovies.map(function (movie) {
-        return movie.movie_id
-      })
-      return ids
+      if (state.watchlistedMovies) {
+        return state.watchlistedMovies.map(movie => {
+          return movie.movie_id
+        })
+      } else {
+        return []
+      }
     }
   },
   mutations: {
