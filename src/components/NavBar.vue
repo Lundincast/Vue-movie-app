@@ -21,16 +21,40 @@
         <v-spacer></v-spacer>
 
         <div v-if='user'>
-          <v-text>
-          <span v-if="user.displayName" class="mr-2">{{ user.displayName }}</span>
-          <span v-else class="mr-2">{{ user.email }}</span>
-          </v-text>
-          <v-btn
-          @click="logout"
-          text
-          >
-          <span class="mr-2">Logout</span>
+          <v-btn icon>
+            <v-icon>mdi-update</v-icon>
           </v-btn>
+          <v-btn icon>
+            <v-icon>mdi-heart</v-icon>
+          </v-btn>
+          <v-menu
+            v-model="menu"
+            bottom
+            :nudge-width="300"
+            transition="slide-y-transition"
+          >
+            <template v-slot:activator="{ on }">
+              <v-avatar
+                v-if="user.photoURL"
+                size="40"
+                v-on="on"
+              >
+                <img :src="user.photoURL">
+              </v-avatar>
+              <v-avatar
+                v-else
+                color="pink"
+                size="40"
+                v-on="on"
+              >
+                <span class="white--text headline">{{ initialLetter }}</span>
+              </v-avatar>
+            </template>
+            <ProfileMenu
+              v-bind:user="user"
+              v-bind:initialLetter="initialLetter"
+              v-on:close-menu="logout"/>
+          </v-menu>
         </div>
         <div v-else>
           <v-dialog
@@ -143,8 +167,12 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'navBar',
+  components: {
+    ProfileMenu: () => import('@/components/ProfileMenu')
+  },
   data () {
     return {
+      menu: false,
       dialog: false,
       username: null,
       email: null,
@@ -167,7 +195,14 @@ export default {
   computed: {
     ...mapState({
       user: state => state.user
-    })
+    }),
+    initialLetter () {
+      if (this.user.displayName) {
+        return this.user.displayName.charAt(0).toUpperCase()
+      } else {
+        return this.user.email.charAt(0).toUpperCase()
+      }
+    }
   },
   methods: {
     signUp () {
@@ -182,6 +217,7 @@ export default {
         })
     },
     logout () {
+      this.menu = false
       this.$store.dispatch('removeUser')
     }
   }
