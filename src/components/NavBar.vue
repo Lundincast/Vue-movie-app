@@ -24,7 +24,7 @@
           <v-btn icon>
             <v-icon>mdi-update</v-icon>
           </v-btn>
-          <v-btn icon>
+          <v-btn icon class="mr-3">
             <v-icon>mdi-heart</v-icon>
           </v-btn>
           <v-menu
@@ -36,6 +36,7 @@
             <template v-slot:activator="{ on }">
               <v-avatar
                 v-if="user.photoURL"
+                class="mr-2 pointer-on-hover"
                 size="40"
                 v-on="on"
               >
@@ -44,6 +45,7 @@
               <v-avatar
                 v-else
                 color="pink"
+                class="mr-2 pointer-on-hover"
                 size="40"
                 v-on="on"
               >
@@ -223,3 +225,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.pointer-on-hover:hover {
+  cursor: pointer;
+}
+</style>

@@ -10,16 +10,15 @@
         <v-list-item-avatar v-else color="pink" size="40">
           <span class="white--text headline">{{ initialLetter }}</span>
         </v-list-item-avatar>
+
         <v-list-item-content>
             <v-list-item-title v-if="user.displayName">{{ user.displayName }}</v-list-item-title>
             <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-    </v-list>
 
-    <v-divider></v-divider>
+      <v-divider></v-divider>
 
-    <v-list flat>
       <v-list-item>
         <v-list-item-icon>
           <v-icon>mdi-heart</v-icon>
