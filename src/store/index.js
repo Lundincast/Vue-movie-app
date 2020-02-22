@@ -9,6 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: null,
+    genres: [],
     loading: false,
     movies: [],
     movie: null,
@@ -77,6 +78,9 @@ export default new Vuex.Store({
     removeUser (state, payload) {
       state.user = null
     },
+    setGenreList (state, payload) {
+      state.genres = payload
+    },
     setMovies (state, payload) {
       state.movies = payload
     },
@@ -119,6 +123,14 @@ export default new Vuex.Store({
         console.log(error)
       })
     },
+    async getGenreList ({ commit }) {
+      try {
+        const response = await api.getGenreList()
+        commit('setGenreList', response)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async getMovies ({ state, commit }, params) {
       state.loading = true
       try {
@@ -141,6 +153,7 @@ export default new Vuex.Store({
         movie.title = response.title
         movie.poster_path = response.poster_path
         movie.runtime = response.runtime
+        movie.genres = response.genres
         movie.overview = response.overview
         movie.production_countries = response.production_countries
         movie.release_date = new Date(response.release_date)

@@ -14,6 +14,7 @@
         :breakpoints="{ 800: { visibleSlides: 4, slideMultiple: 4 } }"
         :bullets="false">
         <vueper-slide
+          v-ripple
           v-for='(movie,i) in relatedMovies'
           :key='i'
           :image='movie.poster_path'

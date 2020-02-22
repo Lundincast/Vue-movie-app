@@ -55,13 +55,27 @@
         </div>
       </div>
       <p><b>Duration :</b> {{ movie.runtime }} min</p>
+      <div>
+        <v-chip
+          v-for="genre in movie.genres"
+          :key="genre.id"
+          class="mr-2 mb-2"
+          color="primary"
+          outlined
+          pill
+        >
+          {{ genre.name }}
+        </v-chip>
+      </div>
       <p class="body-1"><b>Summary:</b> {{ movie.overview }}</p>
-      <p><b>Cast: </b></p>
-      <div v-for="(people, index) in movie.cast" :key="index">
-        {{ people.character }}:
-        <router-link v-bind:to="{ name: 'people', params: { id: people.id}}">
-          <b>{{ people.name }}</b>
-        </router-link>
+      <div v-if="movie.cast.length > 0">
+        <p><b>Cast: </b></p>
+        <div v-for="(people, index) in movie.cast" :key="index">
+          {{ people.character }}:
+          <router-link v-bind:to="{ name: 'people', params: { id: people.id}}">
+            <b>{{ people.name }}</b>
+          </router-link>
+        </div>
       </div>
     </v-col>
   </v-row>

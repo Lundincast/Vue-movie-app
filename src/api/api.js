@@ -29,12 +29,27 @@ instance.interceptors.request.use(config => {
 })
 
 export default {
+  async getGenreList () {
+    const response = await instance
+      .get('/genre/movie/list')
+    return response.data.genres
+  },
   getTrending () {
     return instance
       .get('/trending/movie/week')
       .then(response => {
         return processListUrls(response.data.results)
       })
+  },
+  async getMoviesByGenre (genre, page) {
+    const response = await instance
+      .get('/discover/movie', {
+        params: {
+          with_genres: genre,
+          page: page
+        }
+      })
+    return processListUrls(response.data.results)
   },
   getSingleMovie (id) {
     let url = '/movie/' + id
