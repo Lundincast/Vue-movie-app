@@ -118,7 +118,12 @@ export default {
       if (this.isFavorite) {
         this.$store.dispatch('removeFromFavs', this.$route.params.id)
       } else {
-        this.$store.dispatch('addToFavs', [this.$route.params.id, this.movie.title])
+        this.$store.dispatch('addToFavs', [
+          this.$route.params.id,
+          this.movie.title,
+          this.movie.poster_path,
+          this.movie.overview
+        ])
       }
       this.isFavorite = !this.isFavorite
     },
@@ -126,7 +131,12 @@ export default {
       if (this.isWatchlisted) {
         this.$store.dispatch('removeFromWatchlist', this.$route.params.id)
       } else {
-        this.$store.dispatch('addToWatchlist', [this.$route.params.id, this.movie.title])
+        this.$store.dispatch('addToWatchlist', [
+          this.$route.params.id,
+          this.movie.title,
+          this.movie.poster_path,
+          this.movie.overview
+        ])
       }
       this.isWatchlisted = !this.isWatchlisted
     }

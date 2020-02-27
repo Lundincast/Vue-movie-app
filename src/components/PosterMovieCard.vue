@@ -1,17 +1,17 @@
 <template>
   <v-card
-    height="363"
-    @click="singleMovie(movie.id)">
+    height="355"
+    @click="singleMovie(movieId)">
     <v-img
-      :src="movie.poster_path"
+      :src="moviePosterPath"
     ></v-img>
   </v-card>
 </template>
 
 <script>
 export default {
-  name: 'MovieCard',
-  props: ['movie'],
+  name: 'PosterMovieCard',
+  props: ['movieId', 'moviePosterPath'],
   methods: {
     singleMovie (id) {
       this.$router.push('/movie/' + id)

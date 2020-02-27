@@ -55,7 +55,7 @@ export default new Vuex.Store({
     favMoviesIds: state => {
       if (state.favoriteMovies) {
         return state.favoriteMovies.map(movie => {
-          return movie.movie_id
+          return movie.id
         })
       } else {
         return []
@@ -64,7 +64,7 @@ export default new Vuex.Store({
     watchlistedMoviesIds: state => {
       if (state.watchlistedMovies) {
         return state.watchlistedMovies.map(movie => {
-          return movie.movie_id
+          return movie.id
         })
       } else {
         return []
@@ -241,8 +241,10 @@ export default new Vuex.Store({
           let favs = []
           querySnapshot.forEach(doc => {
             var movie = {}
-            movie.movie_id = doc.data().movie_id
-            movie.movie_name = doc.data().movie_name
+            movie.id = doc.data().movie_id
+            movie.title = doc.data().movie_title
+            movie.poster_path = doc.data().movie_poster_path
+            movie.overview = doc.data().movie_overview
             movie.docId = doc.ref.id
             favs.push(movie)
           })
@@ -257,8 +259,10 @@ export default new Vuex.Store({
           let wl = []
           querySnapshot.forEach(doc => {
             var movie = {}
-            movie.movie_id = doc.data().movie_id
-            movie.movie_name = doc.data().movie_name
+            movie.id = doc.data().movie_id
+            movie.title = doc.data().movie_title
+            movie.poster_path = doc.data().movie_poster_path
+            movie.overview = doc.data().movie_overview
             movie.docId = doc.ref.id
             wl.push(movie)
           })
@@ -271,7 +275,9 @@ export default new Vuex.Store({
         .collection('FavoriteMovies')
         .add({
           movie_id: movieInfo[0],
-          movie_name: movieInfo[1],
+          movie_title: movieInfo[1],
+          movie_poster_path: movieInfo[2],
+          movie_overview: movieInfo[3],
           user_id: firebase.auth().currentUser.uid
         })
     },
@@ -279,7 +285,7 @@ export default new Vuex.Store({
       // Get docId from state.favoriteMovies
       let docId = null
       for (let i = 0; i < state.favoriteMovies.length; i++) {
-        if (state.favoriteMovies[i].movie_id === movieId) {
+        if (state.favoriteMovies[i].id === movieId) {
           docId = state.favoriteMovies[i].docId
           break
         }
@@ -296,14 +302,16 @@ export default new Vuex.Store({
         .collection('WatchlistedMovies')
         .add({
           movie_id: movieInfo[0],
-          movie_name: movieInfo[1],
+          movie_title: movieInfo[1],
+          movie_poster_path: movieInfo[2],
+          movie_overview: movieInfo[3],
           user_id: firebase.auth().currentUser.uid
         })
     },
     removeFromWatchlist ({ state, commit }, movieId) {
       let docId = null
       for (let i = 0; i < state.watchlistedMovies.length; i++) {
-        if (state.watchlistedMovies[i].movie_id === movieId) {
+        if (state.watchlistedMovies[i].id === movieId) {
           docId = state.watchlistedMovies[i].docId
           break
         }

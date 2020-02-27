@@ -21,9 +21,10 @@
             :key="movie.id"
             :cols="3"
           >
-            <MovieCard
+            <PosterMovieCard
               v-if="movies.length"
-              :movie="movie" />
+              :movieId="movie.id"
+              :moviePosterPath="movie.poster_path" />
           </v-col>
         </v-row>
       </v-col>
@@ -46,7 +47,7 @@ export default {
   name: 'carouselSection',
   props: ['genre'],
   components: {
-    MovieCard: () => import('@/components/MovieCard.vue')
+    PosterMovieCard: () => import('@/components/PosterMovieCard.vue')
   },
   data: function () {
     return {

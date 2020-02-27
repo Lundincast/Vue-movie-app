@@ -20,7 +20,7 @@
           height='1500'
           type='image, image, list-item-two-line'
         >
-          <MovieCard v-bind:movie="item"/>
+          <PosterMovieCard v-bind:movie="item"/>
         </v-skeleton-loader>
       </v-flex>
       <v-flex>

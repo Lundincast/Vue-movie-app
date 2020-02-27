@@ -21,12 +21,16 @@
         <v-spacer></v-spacer>
 
         <div v-if='user'>
-          <v-btn icon>
-            <v-icon>mdi-update</v-icon>
-          </v-btn>
-          <v-btn icon class="mr-3">
-            <v-icon>mdi-heart</v-icon>
-          </v-btn>
+          <router-link v-bind:to="{ name: 'watchlisted'}">
+            <v-btn icon>
+              <v-icon>mdi-update</v-icon>
+            </v-btn>
+          </router-link>
+          <router-link v-bind:to="{ name: 'favorites'}">
+            <v-btn icon class="mr-3">
+              <v-icon>mdi-heart</v-icon>
+            </v-btn>
+          </router-link>
           <v-menu
             v-model="menu"
             bottom

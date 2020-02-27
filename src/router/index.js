@@ -29,6 +29,16 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '../components/Login.vue')
+  },
+  {
+    path: '/favorites',
+    name: 'favorites',
+    component: () => import(/* webpackChunkName: "favorites" */ '../views/FavsAndWished.vue')
+  },
+  {
+    path: '/watchlisted',
+    name: 'watchlisted',
+    component: () => import(/* webpackChunkName: "watchlisted" */ '../views/FavsAndWished.vue')
   }
 ]
 
