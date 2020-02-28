@@ -5,6 +5,7 @@
         color="primary"
         dark
     >
+      <router-link v-bind:to="{ name: 'home'}">
         <div class="d-flex align-center">
         <v-img
             alt="Vuetify Logo"
@@ -15,8 +16,9 @@
             width="40"
         />
 
-        <v-toolbar-title>LundinFilms</v-toolbar-title>
+          <v-toolbar-title class="white-text">LundinFilms</v-toolbar-title>
         </div>
+      </router-link>
 
         <v-spacer></v-spacer>
 
@@ -231,7 +233,11 @@ export default {
 </script>
 
 <style scoped>
+
 .pointer-on-hover:hover {
   cursor: pointer;
+}
+.white-text {
+  color: #fff;
 }
 </style>

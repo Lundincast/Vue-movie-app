@@ -9,7 +9,10 @@
           <p class="headline">{{ releaseDate }}</p>
         </div>
       </div>
-      <div class="mx-n2 mb-4">
+      <div
+        v-if="user"
+        class="mx-n2 mb-4"
+      >
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn
@@ -83,7 +86,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'detailsPanel',
@@ -95,6 +98,9 @@ export default {
     }
   },
   computed: {
+    ...mapState([
+      'user'
+    ]),
     ...mapGetters([
       'favMoviesIds',
       'watchlistedMoviesIds'
