@@ -12,10 +12,7 @@ export default new Vuex.Store({
     genres: [],
     loading: false,
     movies: [],
-    movie: null,
     people: null,
-    recommendations: null,
-    similar: null,
     favoriteMovies: null,
     watchlistedMovies: null
   },
@@ -84,17 +81,8 @@ export default new Vuex.Store({
     setMovies (state, payload) {
       state.movies = payload
     },
-    setSingleMovie (state, payload) {
-      state.movie = payload
-    },
     setPeopleDetails (state, payload) {
       state.people = payload
-    },
-    setRecommendations (state, payload) {
-      state.recommendations = payload
-    },
-    setSimilar (state, payload) {
-      state.similar = payload
     },
     setFavoriteMovies (state, payload) {
       state.favoriteMovies = payload
@@ -141,28 +129,6 @@ export default new Vuex.Store({
         })
         state.loading = false
         commit('setMovies', formattedResults)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async getSingleMovie ({ state, commit }, id) {
-      state.loading = true
-      try {
-        let response = await api.getSingleMovie(id)
-        let movie = {}
-        movie.title = response.title
-        movie.poster_path = response.poster_path
-        movie.runtime = response.runtime
-        movie.genres = response.genres
-        movie.overview = response.overview
-        movie.production_countries = response.production_countries
-        movie.release_date = new Date(response.release_date)
-        movie.cast = response.credits.cast.slice(0, 15)
-        movie.director = response.credits.crew.filter(p => p.job === 'Director')// .map(p => p.name).join(', ')
-        commit('setSingleMovie', movie)
-        commit('setRecommendations', response.recommendations.results)
-        commit('setSimilar', response.similar.results)
-        state.loading = false
       } catch (error) {
         console.log(error)
       }
