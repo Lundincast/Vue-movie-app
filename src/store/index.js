@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import api from '../api/api'
 import firebase from 'firebase'
-import _ from 'lodash'
 
 Vue.use(Vuex)
 
@@ -12,43 +11,10 @@ export default new Vuex.Store({
     genres: [],
     loading: false,
     movies: [],
-    people: null,
     favoriteMovies: null,
     watchlistedMovies: null
   },
   getters: {
-    people: state => {
-      return state.people
-    },
-    peopleImages: state => {
-      if (state.people) {
-        return state.people.images.profiles
-          .slice(0, 10)
-          .map(i => 'https://image.tmdb.org/t/p/w500' + i.file_path)
-      } else {
-        return []
-      }
-    },
-    peopleCastCreditsList: state => {
-      if (state.people) {
-        return state.people.movie_credits.cast.map(movie => {
-          movie.release_date = new Date(movie.release_date).getFullYear()
-          return movie
-        })
-      } else {
-        return []
-      }
-    },
-    peopleCrewCreditsList: state => {
-      if (state.people) {
-        return state.people.movie_credits.crew.map(movie => {
-          movie.release_date = new Date(movie.release_date).getFullYear()
-          return movie
-        })
-      } else {
-        return []
-      }
-    },
     favMoviesIds: state => {
       if (state.favoriteMovies) {
         return state.favoriteMovies.map(movie => {
@@ -80,9 +46,6 @@ export default new Vuex.Store({
     },
     setMovies (state, payload) {
       state.movies = payload
-    },
-    setPeopleDetails (state, payload) {
-      state.people = payload
     },
     setFavoriteMovies (state, payload) {
       state.favoriteMovies = payload
@@ -129,72 +92,6 @@ export default new Vuex.Store({
         })
         state.loading = false
         commit('setMovies', formattedResults)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async getPeopleDetails ({ commit }, id) {
-      try {
-        const response = await api.getPeopleDetails(id)
-        // split movies based on if they have release_date defined or not
-        // see here for details https://lodash.com/docs/4.17.15#partition (used with
-        // the `_.property` iteratee shorthand)
-        let splitCastArray = _.partition(response.movie_credits.cast, 'release_date')
-        let splitCrewArray = _.partition(response.movie_credits.crew, 'release_date')
-        // Process arrays to remove duplicates movies when people have
-        // more than one role/job in a single movie
-        let mergedCastMovies = []
-        for (let i = 0; i < splitCastArray[0].length; i++) {
-          if (i === 0) {
-            mergedCastMovies.push(splitCastArray[0][i])
-            continue
-          }
-          for (let j = 0; j < mergedCastMovies.length; j++) {
-            if (splitCastArray[0][i].id === mergedCastMovies[j].id) {
-              mergedCastMovies[j].job = mergedCastMovies[j].job + ', ' + splitCastArray[0][i].job
-              break
-            }
-            if (j === mergedCastMovies.length - 1) {
-              mergedCastMovies.push(splitCastArray[0][i])
-              break
-            }
-          }
-        }
-        let mergedCrewMovies = []
-        for (let i = 0; i < splitCrewArray[0].length; i++) {
-          if (i === 0) {
-            mergedCrewMovies.push(splitCrewArray[0][i])
-            continue
-          }
-          for (let j = 0; j < mergedCrewMovies.length; j++) {
-            if (splitCrewArray[0][i].id === mergedCrewMovies[j].id) {
-              mergedCrewMovies[j].job = mergedCrewMovies[j].job + ', ' + splitCrewArray[0][i].job
-              break
-            }
-            if (j === mergedCrewMovies.length - 1) {
-              mergedCrewMovies.push(splitCrewArray[0][i])
-              break
-            }
-          }
-        }
-        // sort movies arrays by descending release_date
-        mergedCastMovies.sort(function (a, b) {
-          return new Date(b.release_date) - new Date(a.release_date)
-        })
-        mergedCrewMovies.sort(function (a, b) {
-          return new Date(b.release_date) - new Date(a.release_date)
-        })
-        // If there was movies with no release_date, add them to the end of their respective arrays
-        if (splitCastArray[1]) {
-          mergedCastMovies.push(...splitCastArray[1])
-        }
-        if (splitCrewArray[1]) {
-          mergedCrewMovies.push(...splitCrewArray[1])
-        }
-        // reassign these processed array to their respective properties in the response object
-        response.movie_credits.cast = mergedCastMovies
-        response.movie_credits.crew = mergedCrewMovies
-        commit('setPeopleDetails', response)
       } catch (error) {
         console.log(error)
       }
