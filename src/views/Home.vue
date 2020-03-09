@@ -1,30 +1,80 @@
 <template>
   <v-container
-    v-if="sections.length"
     fluid
     class="pa-2"
   >
-    <CarouselSection
-      v-for="genre in sections"
-      :key="genre.id"
-      :genre="genre"/>
+    <div
+      v-for="(genre, id) in sections"
+      :key="id"
+    >
+      <v-row>
+        <div class="ml-12 display-3">
+          {{ genre.name }}
+        </div>
+      </v-row>
+      <CarouselSection
+        v-if="movies"
+        :movies="movies[id]"
+        :context="genre.id"
+        @get-next="getNextMovies"/>
+    </div>
   </v-container>
 </template>
 
 <script>
-// @ is an alias to /src
+import Vue from 'vue'
 import { mapState } from 'vuex'
+import api from '../api/api'
 
 export default {
   name: 'home',
   components: {
     CarouselSection: () => import('@/components/CarouselSection.vue')
   },
+  data () {
+    return {
+      movies: null
+    }
+  },
   computed: {
     ...mapState({
       loading: state => state.loading,
       sections: state => state.genres
     })
+  },
+  methods: {
+    setMoviesList () {
+      Promise.all(
+        this.sections.map(section => {
+          return api.getMoviesByGenre(section.id)
+        })
+      )
+        .then(values => {
+          this.movies = values
+        })
+    },
+    getNextMovies: function (genreId, movieListLength) {
+      let currentPage = movieListLength / 20
+      let genreIndex = this.sections.map(e => e.id).indexOf(genreId)
+      api.getMoviesByGenre(genreId, currentPage + 1)
+        .then(values => {
+          // Use Vue.set() to provide reactivity and properly update CarouselSection's prop
+          // see https://vuejs.org/v2/guide/reactivity.html#For-Arrays for details
+          Vue.set(this.movies, genreIndex, this.movies[genreIndex].concat(values))
+        })
+    }
+  },
+  watch: {
+    sections: function (oldVal, newVal) {
+      if (oldVal.length > 0) { // Oddly enough, movies array is in oldVal
+        this.setMoviesList()
+      }
+    }
+  },
+  mounted () {
+    if (this.sections.length > 0) {
+      this.setMoviesList()
+    }
   }
 }
 </script>

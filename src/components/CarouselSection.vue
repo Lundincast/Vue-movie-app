@@ -1,10 +1,5 @@
 <template>
   <v-container fluid class="mx-0 px-0">
-    <v-row>
-      <div class="ml-12 display-3">
-        {{ genre.name }}
-      </div>
-    </v-row>
     <v-row align="center" justify="center" class="mx-auto">
       <v-col :cols="1">
         <v-btn
@@ -41,18 +36,14 @@
 </template>
 
 <script>
-import api from '../api/api'
-
 export default {
   name: 'carouselSection',
-  props: ['genre'],
+  props: ['movies', 'context'],
   components: {
     PosterMovieCard: () => import('@/components/PosterMovieCard.vue')
   },
   data: function () {
     return {
-      page: 1,
-      movies: [],
       currentFirstElIndex: 0
     }
   },
@@ -71,9 +62,6 @@ export default {
       if ((this.currentFirstElIndex + 4) < this.movies.length) {
         this.currentFirstElIndex = this.currentFirstElIndex + 4
       }
-    },
-    async getMoviesByGenre (genreId, pageNumber) {
-      return api.getMoviesByGenre(genreId, pageNumber)
     }
   },
   watch: {
@@ -81,20 +69,9 @@ export default {
     // 4-movies view, so that we pre-load them before they're needed
     currentFirstElIndex: function (oldVal, newVal) {
       if (newVal >= (this.movies.length - 8)) {
-        this.getMoviesByGenre(this.genre.id, this.page + 1)
-          .catch(console.log('Couldn\'t fetch next batch of movies'))
-          .then((response) => {
-            console.log(response)
-            let mergedMovies = this.movies.concat(response)
-            this.movies = mergedMovies
-            this.page++
-          })
+        this.$emit('get-next', this.context, this.movies.length)
       }
     }
-  },
-  async mounted () {
-    let response = await this.getMoviesByGenre(this.genre.id, this.page)
-    this.movies = response
   }
 }
 </script>
