@@ -51,6 +51,24 @@ export default {
       })
     return processListUrls(response.data.results)
   },
+  async getSimilarMovies (movieId, page) {
+    const response = await instance
+      .get('/movie/' + movieId + '/similar', {
+        params: {
+          page: page
+        }
+      })
+    return processListUrls(response.data.results)
+  },
+  async getRecommendedMovies (movieId, page) {
+    const response = await instance
+      .get('/movie/' + movieId + '/recommendations', {
+        params: {
+          page: page
+        }
+      })
+    return processListUrls(response.data.results)
+  },
   getSingleMovie (id) {
     let url = '/movie/' + id
     return instance

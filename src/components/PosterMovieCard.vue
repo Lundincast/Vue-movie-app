@@ -1,6 +1,6 @@
 <template>
   <v-card
-    height="355"
+    height="auto"
     @click="singleMovie(movieId)">
     <v-img
       :src="moviePosterPath"
