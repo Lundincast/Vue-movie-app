@@ -1,11 +1,8 @@
 <template>
-  <v-container>
-    <v-layout>
-      <v-flex>
-        <div id="firebaseui-container"></div>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-card>
+    <v-card-title class="headline">{{ action }} to LundinFilms</v-card-title>
+    <div id="firebaseui-container" class="pb-1"></div>
+  </v-card>
 </template>
 
 <script>
@@ -15,11 +12,17 @@ import 'firebaseui/dist/firebaseui.css'
 
 export default {
   name: 'login',
+  props: ['action'],
   mounted () {
-    var ui = new firebaseui.auth.AuthUI(firebase.auth())
-    var uiConfig = {
+    let uiConfig = {
+      callbacks: {
+        signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+          return false
+        }
+      },
       signInFlow: 'popup',
       signInSuccessUrl: '/',
+      credentialHelper: firebaseui.auth.CredentialHelper.NONE,
       signInOptions: [
         {
           // Google provider must be enabled in Firebase Console to support one-tap
@@ -35,7 +38,11 @@ export default {
         firebase.auth.EmailAuthProvider.PROVIDER_ID
       ]
     }
+    let ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth())
     ui.start('#firebaseui-container', uiConfig)
+  },
+  beforeDestroy () {
+    this.$emit('close-dialog')
   }
 }
 </script>

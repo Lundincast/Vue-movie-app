@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store'
 import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
@@ -33,12 +34,22 @@ const routes = [
   {
     path: '/favorites',
     name: 'favorites',
-    component: () => import(/* webpackChunkName: "favorites" */ '../views/FavsAndWished.vue')
+    component: () => import(/* webpackChunkName: "favorites" */ '../views/FavsAndWished.vue'),
+    beforeEnter: (to, from, next) => {
+      console.log(store.state.user)
+      if (store.state.user === null) next(from)
+      else next()
+    }
   },
   {
     path: '/watchlisted',
     name: 'watchlisted',
-    component: () => import(/* webpackChunkName: "watchlisted" */ '../views/FavsAndWished.vue')
+    component: () => import(/* webpackChunkName: "watchlisted" */ '../views/FavsAndWished.vue'),
+    beforeEnter: (to, from, next) => {
+      console.log(store.state.user)
+      if (store.state.user === null) next(from)
+      else next()
+    }
   }
 ]
 
