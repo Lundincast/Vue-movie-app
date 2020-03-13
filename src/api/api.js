@@ -1,7 +1,11 @@
 import axios from 'axios'
 
 const formattedUrl = (rawUrl) => {
-  return 'https://image.tmdb.org/t/p/w500' + rawUrl
+  if (rawUrl) {
+    return 'https://image.tmdb.org/t/p/w500' + rawUrl
+  } else {
+    return null
+  }
 }
 
 const processListUrls = (movieList) => {

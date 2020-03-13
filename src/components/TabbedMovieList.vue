@@ -26,6 +26,7 @@
               <PosterMovieCard
                 :movieId="movie.id"
                 :moviePosterPath="movie.poster_path"
+                :movieTitle="movie.title"
                 class="mb-12"
               />
             </v-col>

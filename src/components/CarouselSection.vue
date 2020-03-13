@@ -19,7 +19,8 @@
             <PosterMovieCard
               v-if="movies.length"
               :movieId="movie.id"
-              :moviePosterPath="movie.poster_path" />
+              :moviePosterPath="movie.poster_path"
+              :movieTitle="movie.title" />
           </v-col>
         </v-row>
       </v-col>
