@@ -12,11 +12,13 @@
           {{ genre.name }}
         </div>
       </v-row>
-      <CarouselSection
-        v-if="movies"
-        :movies="movies[id]"
-        :context="genre.id"
-        @get-next="getNextMovies"/>
+      <v-responsive :aspect-ratio="16/6">
+        <CarouselSection
+          v-if="movies"
+          :movies="movies[id]"
+          :context="genre.id"
+          @get-next="getNextMovies"/>
+      </v-responsive>
     </div>
   </v-container>
 </template>

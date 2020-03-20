@@ -8,10 +8,15 @@ const formattedUrl = (rawUrl) => {
   }
 }
 
-const processListUrls = (movieList) => {
-  return movieList.map(function (movie) {
-    movie.poster_path = formattedUrl(movie.poster_path)
-    return movie
+const processListUrls = (itemList) => {
+  return itemList.map(function (item) {
+    if (item.poster_path) {
+      item.poster_path = formattedUrl(item.poster_path)
+    }
+    if (item.profile_path) {
+      item.profile_path = formattedUrl(item.profile_path)
+    }
+    return item
   })
 }
 
@@ -22,7 +27,6 @@ const instance = axios.create({
 instance.interceptors.request.use(config => {
   config.params = {
     page: 1,
-    sort_by: 'popularity.desc',
     // set API Key via a .env.local file. For details, see here:
     // https://cli.vuejs.org/guide/mode-and-env.html#environment-variables
     api_key: process.env.VUE_APP_MOVIEDB_API_KEY,
@@ -59,6 +63,7 @@ export default {
     const response = await instance
       .get('/movie/' + movieId + '/similar', {
         params: {
+          sort_by: 'popularity.desc',
           page: page
         }
       })
@@ -68,6 +73,7 @@ export default {
     const response = await instance
       .get('/movie/' + movieId + '/recommendations', {
         params: {
+          sort_by: 'popularity.desc',
           page: page
         }
       })
@@ -102,5 +108,22 @@ export default {
         response.data.movie_credits.crew = processListUrls(response.data.movie_credits.crew)
         return response.data
       })
+  },
+  async makeSearch (searchString) {
+    const response = await instance
+      .get('/search/multi', {
+        params: {
+          query: searchString,
+          page: 1
+        }
+      })
+    response.data.results.forEach(entry => {
+      if (entry.known_for) {
+        entry.known_for.forEach(movie => {
+          movie.poster_path = formattedUrl(movie.poster_path)
+        })
+      }
+    })
+    return processListUrls(response.data.results)
   }
 }

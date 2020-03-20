@@ -3,7 +3,6 @@
     <v-app-bar
         app
         color="primary"
-        dark
     >
       <router-link v-bind:to="{ name: 'home'}">
         <div class="d-flex align-center">
@@ -22,14 +21,18 @@
 
         <v-spacer></v-spacer>
 
+        <SearchResults :searchString="searchString" />
+
+        <v-spacer></v-spacer>
+
         <div v-if='user'>
           <router-link v-bind:to="{ name: 'watchlisted'}">
-            <v-btn icon>
+            <v-btn icon dark>
               <v-icon>mdi-update</v-icon>
             </v-btn>
           </router-link>
           <router-link v-bind:to="{ name: 'favorites'}">
-            <v-btn icon class="mr-3">
+            <v-btn icon dark class="mr-3">
               <v-icon>mdi-heart</v-icon>
             </v-btn>
           </router-link>
@@ -66,6 +69,7 @@
         </div>
         <div v-else>
           <v-btn
+            dark
             text
             @click="loginDialog = true"
           >
@@ -81,6 +85,11 @@
           </v-dialog>
         </div>
     </v-app-bar>
+    <v-overlay
+      :value="overlay"
+      opacity="0.6"
+      :z-index="1"
+    ></v-overlay>
   </div>
 </template>
 
@@ -92,28 +101,15 @@ export default {
   name: 'navBar',
   components: {
     ProfileMenu: () => import('@/components/ProfileMenu'),
-    Login: () => import('@/components/Login')
+    Login: () => import('@/components/Login'),
+    SearchResults: () => import('@/components/SearchResults')
   },
   data () {
     return {
       menu: false,
+      overlay: false,
       loginDialog: false,
-      username: null,
-      email: null,
-      password: null,
-      password2: null,
-      showPassword: false,
-      showPassword2: false,
-      rules: {
-        required: value => !!value || 'Required.',
-        minUsernameLength: v => v.length >= 2 || 'Min 2 characters',
-        minPasswordLength: v => v.length >= 8 || 'Min 8 characters',
-        emailMatch: v => this.password2 === this.password || 'Passwords don\'t match',
-        validEmail: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          return pattern.test(value) || 'Invalid e-mail.'
-        }
-      }
+      searchString: ''
     }
   },
   computed: {
