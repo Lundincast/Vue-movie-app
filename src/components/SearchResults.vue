@@ -103,22 +103,22 @@ import _ from 'lodash'
 
 export default {
   name: 'searchView',
-  props: ['searchString'],
   data () {
     return {
       searchFieldFocused: false,
       movieResults: [],
-      peopleResults: []
+      peopleResults: [],
+      searchString: ''
     }
   },
   methods: {
     onSearchBlur () {
       this.searchFieldFocused = false
-      this.overlay = false
+      this.$emit('switchOverlay')
     },
     onSearchFocus () {
       this.searchFieldFocused = true
-      this.overlay = true
+      this.$emit('switchOverlay')
     },
     makeSearch: _.debounce(function (searchString) {
       if (searchString !== '') {

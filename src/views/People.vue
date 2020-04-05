@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-responsive>
-      <v-container fluid>
+      <v-container>
         <v-row>
           <v-col md-6 col-12>
             <ImageDisplayer

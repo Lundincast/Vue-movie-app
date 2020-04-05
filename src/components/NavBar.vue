@@ -21,7 +21,7 @@
 
         <v-spacer></v-spacer>
 
-        <SearchResults :searchString="searchString" />
+        <SearchResults @switchOverlay="overlay = !overlay"/>
 
         <v-spacer></v-spacer>
 
@@ -87,7 +87,7 @@
     </v-app-bar>
     <v-overlay
       :value="overlay"
-      opacity="0.6"
+      opacity="0.7"
       :z-index="1"
     ></v-overlay>
   </div>
@@ -108,8 +108,7 @@ export default {
     return {
       menu: false,
       overlay: false,
-      loginDialog: false,
-      searchString: ''
+      loginDialog: false
     }
   },
   computed: {

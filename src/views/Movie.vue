@@ -1,11 +1,10 @@
 <template>
   <v-container
-    fluid
-    class="pa-2"
+    class="pt-2 mx-12"
   >
     <div>
       <v-row class="mx-6">
-        <v-col md="6" cols="12" class="pa-md-8">
+        <v-col md="4" cols="12" class="pa-md-8">
           <v-skeleton-loader
             :loading="loading"
             class="mb-6"
@@ -15,7 +14,7 @@
               v-bind:images="[movie.poster_path]"/>
           </v-skeleton-loader>
         </v-col>
-        <v-col md="6" cols="12">
+        <v-col md="8" cols="12">
           <v-skeleton-loader
             :loading="loading"
             height="894"

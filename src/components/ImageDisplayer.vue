@@ -1,7 +1,11 @@
 <template>
-  <v-img v-if="isSingleImage"
-    :src="images[0]"
-  ></v-img>
+  <v-responsive v-if="isSingleImage" :aspect-ratio="16/9">
+    <v-img
+      :src="images[0]"
+      contain
+      max-height="80vh"
+    ></v-img>
+  </v-responsive>
   <v-carousel v-else height="900">
     <v-carousel-item
         v-for="(image,i) in images"

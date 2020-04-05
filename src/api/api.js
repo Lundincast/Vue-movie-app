@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const formattedUrl = (rawUrl) => {
   if (rawUrl) {
-    return 'https://image.tmdb.org/t/p/w500' + rawUrl
+    return 'https://image.tmdb.org/t/p/original' + rawUrl
   } else {
     return null
   }
@@ -44,8 +44,12 @@ export default {
   },
   getTrending () {
     return instance
-      .get('/trending/movie/week')
+      .get('/trending/movie/day')
       .then(response => {
+        response.data.results.map(movie => {
+          movie.backdrop_path = formattedUrl(movie.backdrop_path)
+          return movie
+        })
         return processListUrls(response.data.results)
       })
   },

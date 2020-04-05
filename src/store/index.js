@@ -10,7 +10,7 @@ export default new Vuex.Store({
     user: null,
     genres: [],
     loading: false,
-    movies: [],
+    trendingMovies: [],
     favoriteMovies: null,
     watchlistedMovies: null
   },
@@ -44,8 +44,8 @@ export default new Vuex.Store({
     setGenreList (state, payload) {
       state.genres = payload
     },
-    setMovies (state, payload) {
-      state.movies = payload
+    setTrendingMovies (state, payload) {
+      state.trendingMovies = payload
     },
     setFavoriteMovies (state, payload) {
       state.favoriteMovies = payload
@@ -82,18 +82,15 @@ export default new Vuex.Store({
         console.log(error)
       }
     },
-    async getMovies ({ state, commit }, params) {
-      state.loading = true
-      try {
-        let response = await api.getTrending()
-        let formattedResults = response.map(function (movie) {
-          movie.release_date = new Date(movie.release_date).getFullYear()
-          return movie
-        })
-        state.loading = false
-        commit('setMovies', formattedResults)
-      } catch (error) {
-        console.log(error)
+    async getTrendingMovies ({ state, commit }) {
+      if (state.trendingMovies.length === 0) {
+        try {
+          let response = await api.getTrending()
+          console.log(response)
+          commit('setTrendingMovies', response.slice(0, 10))
+        } catch (error) {
+          console.log(error)
+        }
       }
     },
     getFavoriteMovies ({ state, commit }, userId) {

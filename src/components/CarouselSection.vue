@@ -4,17 +4,18 @@
       <v-col :cols="1">
         <v-btn
           icon
+          class="float-right"
           @click="showPrevElements"
         >
           <v-icon x-large>mdi-chevron-left</v-icon>
         </v-btn>
       </v-col>
       <v-col :cols="10">
-        <v-row>
+        <v-row justify="center">
           <v-col
             v-for="movie in visibleMovies"
             :key="movie.id"
-            :cols="3"
+            :cols="2"
           >
             <PosterMovieCard
               v-if="movies.length"
@@ -50,7 +51,7 @@ export default {
   },
   computed: {
     visibleMovies () {
-      return this.movies.slice(this.currentFirstElIndex, this.currentFirstElIndex + 4)
+      return this.movies.slice(this.currentFirstElIndex, this.currentFirstElIndex + 6)
     }
   },
   methods: {
@@ -64,6 +65,9 @@ export default {
         this.currentFirstElIndex = this.currentFirstElIndex + 4
       }
     }
+  },
+  mounted () {
+    console.log(this.$vuetify.breakpoint.width)
   },
   watch: {
     // Requests the next 20 movies when the carousel reaches the 2nd-to-last
