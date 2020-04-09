@@ -66,9 +66,6 @@ export default {
       }
     }
   },
-  mounted () {
-    console.log(this.$vuetify.breakpoint.width)
-  },
   watch: {
     // Requests the next 20 movies when the carousel reaches the 2nd-to-last
     // 4-movies view, so that we pre-load them before they're needed

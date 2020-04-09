@@ -2,6 +2,7 @@
   <div>
     <v-app-bar
         app
+        :elevate-on-scroll="isHomeRoute"
         color="primary"
     >
       <router-link v-bind:to="{ name: 'home'}">
@@ -77,6 +78,7 @@
           </v-btn>
           <v-dialog
             v-model="loginDialog"
+            :fullscreen="$vuetify.breakpoint.xsOnly"
             max-width="300"
           >
             <Login
@@ -106,6 +108,7 @@ export default {
   },
   data () {
     return {
+      isHomeRoute: true,
       menu: false,
       overlay: false,
       loginDialog: false
@@ -134,6 +137,15 @@ export default {
     },
     closeDialog () {
       this.loginDialog = false
+    }
+  },
+  watch: {
+    $route (to, from) {
+      if (to.name === 'home') {
+        this.isHomeRoute = true
+      } else {
+        this.isHomeRoute = false
+      }
     }
   }
 }

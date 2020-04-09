@@ -1,54 +1,90 @@
 <template>
-  <v-container
-    fluid
-    class="pa-0"
-  >
-    <v-carousel
-      cycle
-      height="90vh"
-      show-arrows-on-hover
-      v-on:input="showTitle"
-    >
-      <v-carousel-item
-        v-for="(movie, i) in featuredMovies"
-        :key="i"
-        :src="movie.backdrop_path"
-        :to="{ name: 'movie', params: { id: movie.id }}"
+  <v-responsive style="min-height:100vh;">
+    <section id="home">
+      <v-container
+        fluid
+        tag="section"
+        class="white--text home-header"
       >
-        <v-row
-          class="fill-height"
-          align="center"
-          justify="center"
-        >
-          <transition name="slide-fade">
-            <div v-if="show" class="display-2">{{ movie.title }}</div>
-          </transition>
-        </v-row>
-      </v-carousel-item>
-    </v-carousel>
-    <div class="mt-6 mx-12">
-      <div
-        v-for="(genre, id) in sections"
-        :key="id"
-      >
-        <v-row>
-          <div class="ml-12 display-3">
-            {{ genre.name }}
-          </div>
-        </v-row>
         <v-responsive
-          class="mx-12"
-          :aspect-ratio="16/5"
+          class="mx-auto pa-6"
+          style="min-height:50vh;max-width:1304px;"
         >
-          <CarouselSection
-            v-if="movies"
-            :movies="movies[id]"
-            :context="genre.id"
-            @get-next="getNextMovies"/>
+          <v-container class="pa-0">
+            <v-row align="center" class="my-12">
+              <v-col
+                class="col-md-6"
+              >
+                <v-responsive max-width="550px">
+                  <div class="base-title home-header__title mb-4">
+                    <div class="v-markdown">
+                      <h1 class="display-3 font-weight-light">Home-made movie browser in VueJS</h1>
+                    </div>
+                  </div>
+                </v-responsive>
+              </v-col>
+              <v-col
+                class="col-md-6 pa-0"
+                cols="12"
+                ref="carouselBox"
+              >
+                    <v-carousel
+                      cycle
+                      :height="carouselHeight"
+                      :show-arrows="false"
+                      hide-delimiter-background
+                    >
+                      <v-card class="ma-0">
+                      <v-carousel-item
+                        contain
+                        v-for="(movie, i) in featuredMovies"
+                        :key="i"
+                        :src="movie.backdrop_path"
+                        :to="{ name: 'movie', params: { id: movie.id }}"
+                        reverse-transition="fade-transition"
+                        transition="fade-transition"
+                      >
+                      </v-carousel-item>
+                      </v-card>
+                    </v-carousel>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-responsive>
-      </div>
-    </div>
-  </v-container>
+      </v-container>
+      <v-container
+        tag="section"
+        fluid
+        class="py-6 py-md-12"
+      >
+        <v-responsive
+          class="pa-6 mx-auto"
+          style="max-width:1304px;"
+        >
+            <div
+              v-for="(genre, id) in sections"
+              :key="id"
+              class=""
+            >
+              <v-row>
+                <div class="display-3 mx-auto">
+                  {{ genre.name }}
+                </div>
+              </v-row>
+              <v-responsive
+                :aspect-ratio="16/4"
+              >
+                <CarouselSection
+                  v-if="movies"
+                  :movies="movies[id]"
+                  :context="genre.id"
+                  @get-next="getNextMovies"/>
+              </v-responsive>
+            </div>
+        </v-responsive>
+      </v-container>
+    </section>
+  </v-responsive>
 </template>
 
 <script>
@@ -63,8 +99,10 @@ export default {
   },
   data () {
     return {
+      headerCols: 12,
       movies: null,
-      show: false
+      show: true,
+      carouselHeight: 0
     }
   },
   computed: {
@@ -94,10 +132,6 @@ export default {
           // see https://vuejs.org/v2/guide/reactivity.html#For-Arrays for details
           Vue.set(this.movies, genreIndex, this.movies[genreIndex].concat(values))
         })
-    },
-    showTitle () {
-      console.log('showTile called')
-      this.show = true
     }
   },
   watch: {
@@ -108,6 +142,12 @@ export default {
     }
   },
   async mounted () {
+    // Set Carousel's height for proper aspect ratio
+    console.log()
+    this.carouselHeight = this.$refs.carouselBox.clientWidth / 1.77
+    if (this.$vuetify.breakpoint.mdAndUp) {
+      this.headerCols = 6
+    }
     await this.$store.dispatch('getTrendingMovies')
     if (this.sections.length > 0) {
       this.setMoviesList()
@@ -117,17 +157,13 @@ export default {
 </script>
 
 <style scoped>
-/* Enter and leave animations can use different */
-/* durations and timing functions.              */
-.slide-fade-enter-active {
-  transition: all .3s ease;
+.home-header {
+  background: linear-gradient(rgb(24, 103, 192), rgb(92, 187, 246))
 }
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+.home-header__title {
+  line-height: 1.2;
 }
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
+.base-title {
+  display: inline-block;
 }
 </style>
