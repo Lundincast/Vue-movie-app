@@ -1,25 +1,21 @@
 <template>
   <div>
     <v-card
-      v-if="moviePosterPath"
       height="auto"
       @click="singleMovie(movieId)"
     >
       <v-img
+        v-if="moviePosterPath"
         :src="moviePosterPath"
       ></v-img>
-    </v-card>
-    <v-card
-      v-else
-      height="350"
-      @click="singleMovie(movieId)"
-    >
-      <v-card-title>
-        {{ movieTitle }}
-      </v-card-title>
-      <v-card-subtitle>
-        (No Image Available)
-      </v-card-subtitle>
+      <div v-else>
+        <v-card-title>
+          {{ movieTitle }}
+        </v-card-title>
+        <v-card-subtitle>
+          (No Image Available)
+        </v-card-subtitle>
+      </div>
     </v-card>
   </div>
 </template>

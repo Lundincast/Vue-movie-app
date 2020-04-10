@@ -2,7 +2,7 @@
 <v-container>
   <v-row>
     <v-col col col-12>
-      <a class="text--primary body-2 mb-3 d-block underlined" @click="$router.go(-1)">Back to Home</a>
+      <a class="text--primary body-2 mb-3 d-block underlined" @click="$router.go(-1)">Back</a>
       <h1 class="font-weight-bold mb-6 display-2">{{ movie.title }}</h1>
       <div>
         <div>

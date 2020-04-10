@@ -1,59 +1,71 @@
 <template>
-  <v-container
-    class="pt-2 mx-12"
-  >
-    <div>
-      <v-row class="mx-6">
-        <v-col md="4" cols="12" class="pa-md-8">
-          <v-skeleton-loader
-            :loading="loading"
-            class="mb-6"
-            type="image, image, image"
-          >
-            <ImageDisplayer
-              v-bind:images="[movie.poster_path]"/>
-          </v-skeleton-loader>
-        </v-col>
-        <v-col md="8" cols="12">
-          <v-skeleton-loader
-            :loading="loading"
-            height="894"
-            type="article, article, article"
-          >
-            <DetailsPanel
-              v-if="movie"
-              v-bind:movie="movie"/>
-          </v-skeleton-loader>
-        </v-col>
-      </v-row>
-      <v-row
-        v-if="similarMovies && similarMovies.length > 0"
-        class="mt-10"
+  <v-responsive>
+    <section id="movie">
+      <v-container
+        fluid
+        tag="section"
       >
-        <div class="display-2 font-weight-bold mx-auto">
-          Similar Movies
-        </div>
-      </v-row>
-      <CarouselSection
-        v-if="similarMovies && similarMovies.length > 0"
-        :movies="similarMovies"
-        context='similar'
-        @get-next="getNextMovies"/>
-      <v-row
-        v-if="recommendations && recommendations.length > 0"
-        class="mt-6"
-      >
-        <div class="display-2 font-weight-bold mx-auto">
-          You Might Also Like
-        </div>
-      </v-row>
-      <CarouselSection
-        v-if="recommendations && recommendations.length > 0"
-        :movies="recommendations"
-        context='recommended'
-        @get-next="getNextMovies"/>
-    </div>
-  </v-container>
+        <v-responsive
+          class="mx-auto"
+          style="min-height:50vh;max-width:1304px;"
+        >
+          <v-container>
+            <v-row>
+              <v-col md="4" cols="12" class="pa-md-8">
+                <v-skeleton-loader
+                  :loading="loading"
+                  class="mb-6"
+                  type="image, image, image"
+                >
+                  <ImageDisplayer
+                    v-bind:images="[movie.poster_path]"/>
+                </v-skeleton-loader>
+              </v-col>
+              <v-col md="8" cols="12">
+                <v-skeleton-loader
+                  :loading="loading"
+                  height="894"
+                  type="article, article, article"
+                >
+                  <DetailsPanel
+                    v-if="movie"
+                    v-bind:movie="movie"/>
+                </v-skeleton-loader>
+              </v-col>
+            </v-row>
+          </v-container>
+          <v-container>
+            <v-row
+              v-if="similarMovies && similarMovies.length > 0"
+              class="mt-10"
+            >
+              <div class="display-2 font-weight-bold mx-auto">
+                Similar Movies
+              </div>
+            </v-row>
+            <CarouselSection
+              v-if="similarMovies && similarMovies.length > 0"
+              :movies="similarMovies"
+              context='similar'
+              @get-next="getNextMovies"/>
+            <v-row
+              v-if="recommendations && recommendations.length > 0"
+              class="mt-6"
+            >
+              <div class="display-2 font-weight-bold mx-auto">
+                You Might Also Like
+              </div>
+            </v-row>
+            <CarouselSection
+              v-if="recommendations && recommendations.length > 0"
+              :movies="recommendations"
+              context='recommended'
+              @get-next="getNextMovies"/>
+          </v-container>
+        </v-responsive>
+      </v-container>
+    </section>
+  </v-responsive>
 </template>
 
 <script>

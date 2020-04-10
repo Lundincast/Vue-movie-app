@@ -143,7 +143,6 @@ export default {
   },
   async mounted () {
     // Set Carousel's height for proper aspect ratio
-    console.log()
     this.carouselHeight = this.$refs.carouselBox.clientWidth / 1.77
     if (this.$vuetify.breakpoint.mdAndUp) {
       this.headerCols = 6

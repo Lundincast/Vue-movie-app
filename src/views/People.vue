@@ -1,28 +1,38 @@
 <template>
-  <v-container fluid>
-    <v-responsive>
-      <v-container>
-        <v-row>
-          <v-col md-6 col-12>
-            <ImageDisplayer
-              v-if="people"
-              :images="peopleImages"/>
-          </v-col>
-          <v-col md-6 col-12>
-            <PeopleDetailsPanel
-              v-if="people"
-              :people="people"/>
-          </v-col>
-        </v-row>
-        <v-row>
-          <PeopleCredits
-            v-if="people"
-            v-bind:castMovies="peopleCastCreditsList"
-            v-bind:crewMovies="peopleCrewCreditsList"/>
-        </v-row>
+  <v-responsive>
+    <section id="people">
+      <v-container
+        fluid
+        tag="section"
+      >
+        <v-responsive
+          class="mx-auto"
+          style="min-height:50vh;max-width:1304px;"
+        >
+          <v-container>
+            <v-row>
+              <v-col md="4" cols="12" class="pa-md-8">
+                <ImageDisplayer
+                  v-if="people"
+                  :images="peopleImages"/>
+              </v-col>
+              <v-col md="8" cols="12">
+                <PeopleDetailsPanel
+                  v-if="people"
+                  :people="people"/>
+              </v-col>
+            </v-row>
+            <v-row>
+              <PeopleCredits
+                v-if="people"
+                v-bind:castMovies="peopleCastCreditsList"
+                v-bind:crewMovies="peopleCrewCreditsList"/>
+            </v-row>
+          </v-container>
+        </v-responsive>
       </v-container>
-    </v-responsive>
-  </v-container>
+    </section>
+  </v-responsive>
 </template>
 
 <script>
@@ -45,8 +55,8 @@ export default {
     peopleImages: function () {
       if (this.people) {
         return this.people.images.profiles
-          .slice(0, 10)
-          .map(i => 'https://image.tmdb.org/t/p/w500' + i.file_path)
+          .slice(0, 1)
+          .map(i => 'https://image.tmdb.org/t/p/original' + i.file_path)
       } else {
         return []
       }
