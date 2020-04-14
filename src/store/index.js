@@ -86,7 +86,6 @@ export default new Vuex.Store({
       if (state.trendingMovies.length === 0) {
         try {
           let response = await api.getTrending()
-          console.log(response)
           commit('setTrendingMovies', response.slice(0, 10))
         } catch (error) {
           console.log(error)

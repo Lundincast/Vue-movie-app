@@ -66,7 +66,6 @@ export default {
       // see here for details https://lodash.com/docs/4.17.15#partition (used with
       // the `_.property` iteratee shorthand)
       let splitCastArray = _.partition(this.people.movie_credits.cast, 'release_date')
-      console.log('splitCastArray: ' + splitCastArray[0])
       let mergedArray = this.removeDuplicates(splitCastArray[0])
       // sort movies arrays by descending release_date
       mergedArray.sort(function (a, b) {

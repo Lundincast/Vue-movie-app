@@ -1,0 +1,24 @@
+steps:
+- name: gcr.io/cloud-builders/gcloud
+  entrypoint: "bash"
+  args:
+    - "-c"
+    - |
+        # Store the secret as .env file
+        gcloud beta secrets versions access --secret=films-env-vars latest > .env
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'eu.gcr.io/$PROJECT_ID/films-vue-app-$COMMIT_SHA', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'eu.gcr.io/$PROJECT_ID/films-vue-app-$COMMIT_SHA']
+- name: gcr.io/cloud-builders/gcloud
+  args: 
+  - 'run'
+  - 'deploy'
+  - 'films-vue-app'
+  - '--image'
+  - 'eu.gcr.io/$PROJECT_ID/films-vue-app-$COMMIT_SHA'
+  - '--platform'
+  - 'managed'
+  - '--region'
+  - 'europe-west1'
+  - '--allow-unauthenticated'

@@ -36,7 +36,6 @@ const routes = [
     name: 'favorites',
     component: () => import(/* webpackChunkName: "favorites" */ '../views/FavsAndWished.vue'),
     beforeEnter: (to, from, next) => {
-      console.log(store.state.user)
       if (store.state.user === null) next(from)
       else next()
     }
@@ -46,7 +45,6 @@ const routes = [
     name: 'watchlisted',
     component: () => import(/* webpackChunkName: "watchlisted" */ '../views/FavsAndWished.vue'),
     beforeEnter: (to, from, next) => {
-      console.log(store.state.user)
       if (store.state.user === null) next(from)
       else next()
     }
